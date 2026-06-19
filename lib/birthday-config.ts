@@ -34,7 +34,7 @@ export const birthdayConfig = {
   messageLines: [
     "Hôm nay là...",
     "một ngày rất đẹp",
-    "nhưng mình nhận ra rằng",
+    "và mình nhận ra rằng",
     "thêm một năm nữa đã trôi qua",
     "chỉ trong nháy mắt",
     "tuy nhiên",
