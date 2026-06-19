@@ -1,0 +1,28 @@
+# dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# next.js
+.next
+out
+
+# misc
+.git
+.gitignore
+.env*.local
+.env
+*.md
+!public/README-audio.md
+
+# dev / test
+terminals
+.cursor
+.vscode
+*.log
+
+# docker
+Dockerfile*
+docker-compose*
+.dockerignore

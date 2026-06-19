@@ -1,0 +1,97 @@
+.bulb {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+
+.bulb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.offLayer {
+  opacity: 1;
+}
+
+.onLayer {
+  opacity: 0;
+}
+
+.lit .onLayer {
+  opacity: 1;
+}
+
+.lit .offLayer {
+  opacity: 0;
+}
+
+.flashYellow .onLayer {
+  animation: bulbFlash 1s linear infinite;
+}
+
+.flashYellow .offLayer {
+  animation: bulbFlashInverse 1s linear infinite;
+}
+
+.flashRed .onLayer {
+  animation: bulbFlash 1.2s linear infinite;
+}
+
+.flashRed .offLayer {
+  animation: bulbFlashInverse 1.2s linear infinite;
+}
+
+.flashBlue .onLayer {
+  animation: bulbFlash 1.4s linear infinite;
+}
+
+.flashBlue .offLayer {
+  animation: bulbFlashInverse 1.4s linear infinite;
+}
+
+.flashGreen .onLayer {
+  animation: bulbFlash 1.1s linear infinite;
+}
+
+.flashGreen .offLayer {
+  animation: bulbFlashInverse 1.1s linear infinite;
+}
+
+.flashPink .onLayer {
+  animation: bulbFlash 1.3s linear infinite;
+}
+
+.flashPink .offLayer {
+  animation: bulbFlashInverse 1.3s linear infinite;
+}
+
+.flashOrange .onLayer {
+  animation: bulbFlash 1.5s linear infinite;
+}
+
+.flashOrange .offLayer {
+  animation: bulbFlashInverse 1.5s linear infinite;
+}
+
+@keyframes bulbFlash {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes bulbFlashInverse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
