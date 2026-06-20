@@ -5,7 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import { useBirthdayFlow } from "@/hooks/useBirthdayFlow";
 import { useAudio } from "@/hooks/useAudio";
 import { useMounted } from "@/hooks/useMounted";
-import { playButtonTap } from "@/lib/sfx";
+import { playButtonTap, warmupSfx } from "@/lib/sfx";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { Stage } from "@/components/Stage";
 import { ActionButton } from "@/components/ActionButton";
@@ -30,6 +30,11 @@ export default function Home() {
 
   useEffect(() => {
     if (!mounted) return;
+    warmupSfx();
+  }, [mounted]);
+
+  useEffect(() => {
+    if (!mounted) return;
 
     const body = document.body;
     body.classList.remove("peach", "peach-animated");
@@ -47,7 +52,7 @@ export default function Home() {
   }, [mounted, state.peachBackground, state.peachAnimated]);
 
   const handleAdvance = () => {
-    playButtonTap();
+    if (state.isTransitioning) return;
 
     if (state.step === "music") {
       play();
@@ -58,7 +63,8 @@ export default function Home() {
   const showButton =
     INTERACTIVE_STEPS.includes(state.step) &&
     !state.showMessage &&
-    state.step !== "done";
+    state.step !== "done" &&
+    !state.isTransitioning;
   const isLoading = state.step === "loading";
 
   if (!mounted) {
@@ -88,7 +94,7 @@ export default function Home() {
                 <ActionButton
                   key={state.step}
                   step={state.step}
-                  disabled={state.isTransitioning}
+                  onTapSound={playButtonTap}
                   onClick={handleAdvance}
                 />
               )}

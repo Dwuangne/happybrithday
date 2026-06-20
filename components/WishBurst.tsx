@@ -24,7 +24,6 @@ export function WishBurst({ active }: WishBurstProps) {
             exit={{ scale: 1.15, opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            Chúc Mừng Sinh Nhật
           </motion.h1>
           <motion.p
             className="font-name mt-4 text-center text-4xl font-semibold italic tracking-wide text-rose-900 drop-shadow-md sm:mt-6 sm:text-6xl"
@@ -33,7 +32,6 @@ export function WishBurst({ active }: WishBurstProps) {
             exit={{ opacity: 0 }}
             transition={{ delay: 0.35, duration: 0.65, ease: "easeOut" }}
           >
-            {birthdayConfig.recipientName}
           </motion.p>
         </motion.div>
       )}
