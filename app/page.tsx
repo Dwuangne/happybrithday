@@ -88,7 +88,7 @@ export default function Home() {
             onBalloonPopComplete={onBalloonPopComplete}
           />
 
-          <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center bg-gradient-to-t from-black/50 via-black/30 to-transparent px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:px-4 sm:pb-8 sm:pt-4">
+          <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:px-4 sm:pb-8 sm:pt-4">
             <AnimatePresence mode="wait">
               {showButton && (
                 <ActionButton
