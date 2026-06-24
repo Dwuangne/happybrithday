@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { birthdayConfig } from "@/lib/birthday-config";
 
 interface PhotoBackgroundProps {
@@ -10,24 +10,44 @@ interface PhotoBackgroundProps {
   dimForStory: boolean;
 }
 
-function preloadPhotos(urls: string[], count: number) {
-  urls.slice(0, count).forEach((src) => {
+function preloadPhoto(src: string, cache: Set<string>): Promise<void> {
+  if (cache.has(src)) return Promise.resolve();
+
+  return new Promise((resolve) => {
     const img = new window.Image();
+    img.onload = () => {
+      cache.add(src);
+      resolve();
+    };
+    img.onerror = () => resolve();
     img.src = src;
   });
+}
+
+function preloadAllPhotos(urls: readonly string[], cache: Set<string>) {
+  return Promise.all(urls.map((src) => preloadPhoto(src, cache)));
 }
 
 export function PhotoBackground({ active, dimForStory }: PhotoBackgroundProps) {
   const photos = birthdayConfig.decoratePhotos;
   const settings = birthdayConfig.photoMontage;
 
-  const [index, setIndex] = useState(0);
+  const loadedRef = useRef<Set<string>>(new Set());
+  const indexRef = useRef(0);
+  const topSlotRef = useRef<0 | 1>(0);
+  const advancingRef = useRef(false);
 
-  const currentSrc = photos[index % photos.length] ?? photos[0];
+  const [topSlot, setTopSlot] = useState<0 | 1>(0);
+  const [slotSrc, setSlotSrc] = useState<[string, string]>([photos[0], photos[1]]);
 
   const reset = useCallback(() => {
-    setIndex(0);
-  }, []);
+    indexRef.current = 0;
+    topSlotRef.current = 0;
+    advancingRef.current = false;
+    setTopSlot(0);
+    setSlotSrc([photos[0], photos[1]]);
+    loadedRef.current.clear();
+  }, [photos]);
 
   useEffect(() => {
     if (!active) {
@@ -36,18 +56,43 @@ export function PhotoBackground({ active, dimForStory }: PhotoBackgroundProps) {
     }
 
     reset();
-    preloadPhotos([...photos], 3);
+    void preloadAllPhotos(photos, loadedRef.current);
   }, [active, photos, reset]);
 
   useEffect(() => {
     if (!active) return;
 
+    const advance = async () => {
+      if (advancingRef.current) return;
+      advancingRef.current = true;
+
+      try {
+        const nextIndex = (indexRef.current + 1) % photos.length;
+        const nextSrc = photos[nextIndex];
+        const hiddenSlot: 0 | 1 = topSlotRef.current === 0 ? 1 : 0;
+
+        await preloadPhoto(nextSrc, loadedRef.current);
+
+        setSlotSrc((prev) => {
+          const next = [...prev] as [string, string];
+          next[hiddenSlot] = nextSrc;
+          return next;
+        });
+
+        topSlotRef.current = hiddenSlot;
+        indexRef.current = nextIndex;
+        setTopSlot(hiddenSlot);
+      } finally {
+        advancingRef.current = false;
+      }
+    };
+
     const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % photos.length);
+      void advance();
     }, settings.ambientSlideMs);
 
     return () => clearInterval(timer);
-  }, [active, photos.length, settings.ambientSlideMs]);
+  }, [active, photos, settings.ambientSlideMs]);
 
   if (!active) return null;
 
@@ -56,13 +101,11 @@ export function PhotoBackground({ active, dimForStory }: PhotoBackgroundProps) {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[1] overflow-hidden" aria-hidden>
-      <AnimatePresence mode="sync">
+      {([0, 1] as const).map((slot) => (
         <motion.div
-          key={`bg-${currentSrc}`}
+          key={slot}
           className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity }}
-          exit={{ opacity: 0 }}
+          animate={{ opacity: topSlot === slot ? opacity : 0 }}
           transition={{ duration: crossfade, ease: "easeInOut" }}
         >
           <motion.div
@@ -74,19 +117,21 @@ export function PhotoBackground({ active, dimForStory }: PhotoBackgroundProps) {
             }}
           >
             <Image
-              src={currentSrc}
+              src={slotSrc[slot]}
               alt=""
               fill
+              unoptimized
               className="object-cover object-center"
               style={{
-                filter: settings.ambientBlurPx > 0 ? `blur(${settings.ambientBlurPx}px)` : undefined,
+                filter:
+                  settings.ambientBlurPx > 0 ? `blur(${settings.ambientBlurPx}px)` : undefined,
               }}
               sizes="100vw"
-              priority={index === 0}
+              priority={slot === 0}
             />
           </motion.div>
         </motion.div>
-      </AnimatePresence>
+      ))}
     </div>
   );
 }
