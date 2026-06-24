@@ -21,6 +21,7 @@ export interface BirthdayFlowState {
   messageStarted: boolean;
   cakeHiddenForMessage: boolean;
   showCakeAfterMessage: boolean;
+  photoBgActive: boolean;
 }
 
 const initialState: BirthdayFlowState = {
@@ -41,6 +42,7 @@ const initialState: BirthdayFlowState = {
   messageStarted: false,
   cakeHiddenForMessage: false,
   showCakeAfterMessage: false,
+  photoBgActive: false,
 };
 
 export function useBirthdayFlow() {
@@ -89,6 +91,7 @@ export function useBirthdayFlow() {
               ...prev,
               isTransitioning: true,
               bannerVisible: true,
+              photoBgActive: true,
             };
           case "balloons":
             return {

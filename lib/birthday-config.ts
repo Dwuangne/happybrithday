@@ -31,6 +31,28 @@ export const birthdayConfig = {
     story: "Một lời nhắn dành cho bạn",
   },
 
+  decoratePhotos: [
+    "/bg1.jpg",
+    "/bg2.jpg",
+    "/bg3.jpg",
+    "/bg4.jpg",
+    "/bg5.jpg",
+    "/bg6.jpg",
+    "/bg7.jpg",
+    "/bg8.jpg",
+    "/bg9.jpg",
+    "/bg10.jpg",
+  ],
+
+  photoMontage: {
+    crossfadeMs: 400,
+    ambientSlideMs: 3500,
+    ambientBlurPx: 8,
+    ambientScale: 1.06,
+    ambientOpacity: 0.68,
+    ambientOpacityStory: 0.45,
+  },
+
   messageLines: [
     "Hôm nay là...",
     "một ngày thật sự đặc biệt",
@@ -64,6 +86,10 @@ export function getBalloonLettersFromConfig(): string[] {
 
 export function getExtraBalloonCount(): number {
   return birthdayConfig.extraFloatingBalloons;
+}
+
+export function getDecoratePhotosFromConfig(): string[] {
+  return [...birthdayConfig.decoratePhotos];
 }
 
 export function formatMessageLine(line: string, name: string): string {

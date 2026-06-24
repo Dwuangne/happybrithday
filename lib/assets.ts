@@ -27,6 +27,13 @@ export const ASSETS = {
   soundPhao: "/sound_phao.mp3",
 } as const;
 
+export const DECORATE_BG_COUNT = 10;
+
+export function getDecorateBgPhoto(index: number): string {
+  const n = (index % DECORATE_BG_COUNT) + 1;
+  return `/bg${n}.jpg`;
+}
+
 export function getBalloonImage(index: number): string {
   return BALLOON_IMAGES[index % BALLOON_IMAGES.length];
 }

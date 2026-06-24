@@ -8,6 +8,7 @@ import { BannerTitle } from "./BannerTitle";
 import { BalloonField } from "./BalloonField";
 import { Cake } from "./Cake";
 import { MessageStory } from "./MessageStory";
+import { PhotoBackground } from "./PhotoBackground";
 import { WishBurst } from "./WishBurst";
 
 interface StageProps {
@@ -31,6 +32,8 @@ export function Stage({ state, onMessageComplete, onBalloonPopComplete }: StageP
 
   return (
     <>
+      <PhotoBackground active={state.photoBgActive} dimForStory={showMessage} />
+
       <WishBurst active={state.balloonsPopping} />
 
       {showBalloons && (

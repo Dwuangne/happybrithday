@@ -65,7 +65,7 @@ export function MessageStory({ active, onComplete, marginTop }: MessageStoryProp
       style={{ marginTop: marginTop ?? "clamp(1.5rem, 8vh, 3rem)" }}
     >
       <p
-        className={`font-message max-w-2xl text-center leading-relaxed tracking-wide text-rose-700 transition-all duration-500 ${
+        className={`font-message max-w-2xl text-center leading-relaxed tracking-wide text-rose-700 transition-all duration-500 [text-shadow:0_1px_8px_rgba(255,255,255,0.9),0_0_24px_rgba(255,255,255,0.6)] ${
           isLast
             ? "text-xl font-bold sm:text-3xl"
             : "text-base font-medium sm:text-xl"
